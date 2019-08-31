@@ -1,7 +1,7 @@
 Summary:	Versatile file search utility for the Xfce desktop
 Name:		catfish
 Version:	1.4.9
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		X11/Applications/Graphics
 Source0:	http://archive.xfce.org/src/apps/catfish/1.4/%{name}-%{version}.tar.bz2
@@ -21,6 +21,7 @@ Requires:	python3-dbus
 Requires:	python3-pexpect
 Requires:	python3-pygobject3
 Suggests:	python3-zeitgeist
+BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -46,6 +47,8 @@ cp -a build/share/applications/org.xfce.Catfish.desktop $RPM_BUILD_ROOT%{_deskto
 %{__python3} setup.py install \
 	--skip-build \
 	--prefix=%{_prefix} \
+	--install-purelib=%{py3_sitescriptdir} \
+	--install-platlib=%{py3_sitedir} \
 	--root=$RPM_BUILD_ROOT
 
 cp -a build/mo/* $RPM_BUILD_ROOT%{_localedir}/
@@ -73,8 +76,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_desktopdir}/org.xfce.Catfish.desktop
 %{_datadir}/metainfo/catfish.appdata.xml
 %{_iconsdir}/hicolor/*/*/*
-%{py3_sitedir}/catfish-1.4.9-py3.7.egg-info
-%{py3_sitedir}/catfish
-%{py3_sitedir}/catfish_lib
+%{py3_sitescriptdir}/catfish-1.4.9-py3.7.egg-info
+%{py3_sitescriptdir}/catfish
+%{py3_sitescriptdir}/catfish_lib
 %{_datadir}/catfish
 %{_mandir}/man1/catfish.1*
