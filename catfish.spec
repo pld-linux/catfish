@@ -1,7 +1,7 @@
 Summary:	Versatile file search utility for the Xfce desktop
 Name:		catfish
 Version:	1.4.9
-Release:	0.1
+Release:	1
 License:	GPL v2
 Group:		X11/Applications/Graphics
 Source0:	http://archive.xfce.org/src/apps/catfish/1.4/%{name}-%{version}.tar.bz2
@@ -30,6 +30,9 @@ finding files.
 
 %prep
 %setup -q
+
+# fix #!/usr/bin/env python -> #!/usr/bin/python3:
+find -name '*.py' | xargs %{__sed} -i -e '1s,^#!.*python$,#!%{__python3},'
 
 %build
 %{__python3} setup.py build
