@@ -1,0 +1,77 @@
+Summary:	Versatile file search utility for the Xfce desktop
+Name:		catfish
+Version:	1.4.9
+Release:	0.1
+License:	GPL v2
+Group:		X11/Applications/Graphics
+Source0:	http://archive.xfce.org/src/apps/catfish/1.4/%{name}-%{version}.tar.bz2
+# Source0-md5:	829824fba33e86d03345bbc718e7b2d9
+URL:		https://docs.xfce.org/apps/catfish/
+BuildRequires:	python3-distutils-extra
+BuildRequires:	python3-modules
+BuildRequires:	python3-pexpect
+BuildRequires:	python3-pygobject3
+BuildRequires:	python3-setuptools
+BuildRequires:	rpm-pythonprov
+BuildRequires:	rpmbuild(macros) >= 1.714
+Requires:	gtk-update-icon-cache
+Requires:	hicolor-icon-theme
+Requires:	mlocate
+Requires:	python3-dbus
+Requires:	python3-pexpect
+Requires:	python3-pygobject3
+Suggests:	python3-zeitgeist
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+%description
+Catfish is a versatile file search utility for the Xfce desktop.
+Powered by Python and GTK, it is fast, flexible, and exceptional at
+finding files.
+
+%prep
+%setup -q
+
+%build
+%{__python3} setup.py build
+
+%install
+rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT{%{_desktopdir},%{_localedir}}
+
+cp -a build/share/applications/org.xfce.Catfish.desktop $RPM_BUILD_ROOT%{_desktopdir}/
+
+%{__python3} setup.py install \
+	--skip-build \
+	--prefix=%{_prefix} \
+	--root=$RPM_BUILD_ROOT
+
+cp -a build/mo/* $RPM_BUILD_ROOT%{_localedir}/
+
+%{__rm} -r $RPM_BUILD_ROOT%{_localedir}/ie
+%{__mv} $RPM_BUILD_ROOT%{_localedir}/{hy_AM,hy}
+
+%find_lang %{name}
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%post
+%update_desktop_database_post
+%update_icon_cache hicolor
+
+%postun
+%update_desktop_database_postun
+%update_icon_cache hicolor
+
+%files -f %{name}.lang
+%defattr(644,root,root,755)
+%doc AUTHORS ChangeLog README
+%attr(755,root,root) %{_bindir}/%{name}
+%{_desktopdir}/org.xfce.Catfish.desktop
+%{_datadir}/metainfo/catfish.appdata.xml
+%{_iconsdir}/hicolor/*/*/*
+%{py3_sitedir}/catfish-1.4.9-py3.7.egg-info
+%{py3_sitedir}/catfish
+%{py3_sitedir}/catfish_lib
+%{_datadir}/catfish
+%{_mandir}/man1/catfish.1*
