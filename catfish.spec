@@ -1,11 +1,11 @@
 Summary:	Versatile file search utility for the Xfce desktop
 Name:		catfish
-Version:	1.4.9
-Release:	4
+Version:	1.4.13
+Release:	1
 License:	GPL v2
 Group:		X11/Applications/Graphics
 Source0:	http://archive.xfce.org/src/apps/catfish/1.4/%{name}-%{version}.tar.bz2
-# Source0-md5:	829824fba33e86d03345bbc718e7b2d9
+# Source0-md5:	750b65401c9445e185e71c808d7509a4
 URL:		https://docs.xfce.org/apps/catfish/
 BuildRequires:	python3-distutils-extra
 BuildRequires:	python3-modules
