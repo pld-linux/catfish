@@ -1,14 +1,16 @@
 Summary:	Versatile file search utility for the Xfce desktop
 Name:		catfish
-Version:	4.18.0
+Version:	4.20.0
 Release:	1
 License:	GPL v2
 Group:		X11/Applications/Graphics
-Source0:	https://archive.xfce.org/src/apps/catfish/4.18/%{name}-%{version}.tar.bz2
-# Source0-md5:	991eb9da850717947ecb2758aa5af87d
+Source0:	https://archive.xfce.org/src/apps/catfish/4.20/%{name}-%{version}.tar.bz2
+# Source0-md5:	16e66e895dc997e5effe163f610858b8
 URL:		https://docs.xfce.org/apps/catfish/
-BuildRequires:	glib2-devel >= 1:2.50.0
-BuildRequires:	gtk+3-devel >= 3.22.0
+BuildRequires:	glib2-devel >= 1:2.72.0
+BuildRequires:	gtk+3-devel >= 3.24.0
+BuildRequires:	meson >= 0.59.0
+BuildRequires:	ninja
 BuildRequires:	python3-dbus
 BuildRequires:	python3-distutils-extra
 BuildRequires:	python3-modules
@@ -16,8 +18,9 @@ BuildRequires:	python3-pexpect
 BuildRequires:	python3-pygobject3
 BuildRequires:	python3-setuptools
 BuildRequires:	rpm-pythonprov
-BuildRequires:	rpmbuild(macros) >= 1.714
-BuildRequires:	xfconf-devel >= 4.14.0
+BuildRequires:	rpmbuild(macros) >= 1.726
+BuildRequires:	xfconf-devel >= 4.20.0
+BuildRequires:	zeitgeist-devel
 Requires:	gtk-update-icon-cache
 Requires:	hicolor-icon-theme
 Requires:	mlocate
@@ -25,6 +28,7 @@ Requires:	python3-dbus
 Requires:	python3-pexpect
 Requires:	python3-pygobject3
 Suggests:	python3-zeitgeist
+Suggests:	zeitgeist
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -36,26 +40,13 @@ finding files.
 %prep
 %setup -q
 
-# fix #!/usr/bin/env python -> #!/usr/bin/python3:
-find -name '*.py' | xargs %{__sed} -i -e '1s,^#!.*python$,#!%{__python3},'
-
 %build
-%{__python3} setup.py build
+%meson build
+%ninja_build -C build
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_desktopdir},%{_localedir}}
-
-cp -a build/share/applications/org.xfce.Catfish.desktop $RPM_BUILD_ROOT%{_desktopdir}/
-
-%{__python3} setup.py install \
-	--skip-build \
-	--prefix=%{_prefix} \
-	--install-purelib=%{py3_sitescriptdir} \
-	--install-platlib=%{py3_sitedir} \
-	--root=$RPM_BUILD_ROOT
-
-cp -a build/mo/* $RPM_BUILD_ROOT%{_localedir}/
+%ninja_install -C build
 
 %{__rm} -r $RPM_BUILD_ROOT%{_localedir}/{hye,ie}
 %{__mv} $RPM_BUILD_ROOT%{_localedir}/{hy_AM,hy}
@@ -81,7 +72,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_desktopdir}/org.xfce.Catfish.desktop
 %{_datadir}/metainfo/catfish.appdata.xml
 %{_iconsdir}/hicolor/*/*/*
-%{py3_sitescriptdir}/catfish-*.egg-info
 %{py3_sitescriptdir}/catfish
 %{py3_sitescriptdir}/catfish_lib
 %{_datadir}/catfish
