@@ -1,7 +1,7 @@
 Summary:	Versatile file search utility for the Xfce desktop
 Name:		catfish
 Version:	4.20.0
-Release:	3
+Release:	4
 License:	GPL v2
 Group:		X11/Applications/Graphics
 Source0:	https://archive.xfce.org/src/apps/catfish/4.20/%{name}-%{version}.tar.bz2
@@ -41,12 +41,12 @@ finding files.
 %setup -q
 
 %build
-%meson build
-%ninja_build -C build
+%meson
+%meson_build
 
 %install
 rm -rf $RPM_BUILD_ROOT
-%ninja_install -C build
+%meson_install
 
 %{__rm} -r $RPM_BUILD_ROOT%{_localedir}/{hye,ie}
 %{__mv} $RPM_BUILD_ROOT%{_localedir}/{hy_AM,hy}
