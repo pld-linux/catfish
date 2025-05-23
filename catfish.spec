@@ -1,11 +1,11 @@
 Summary:	Versatile file search utility for the Xfce desktop
 Name:		catfish
-Version:	4.20.0
-Release:	4
+Version:	4.20.1
+Release:	1
 License:	GPL v2
 Group:		X11/Applications/Graphics
-Source0:	https://archive.xfce.org/src/apps/catfish/4.20/%{name}-%{version}.tar.bz2
-# Source0-md5:	16e66e895dc997e5effe163f610858b8
+Source0:	https://archive.xfce.org/src/apps/catfish/4.20/%{name}-%{version}.tar.xz
+# Source0-md5:	a2b5f473d95dfb0445aec182e6c57030
 URL:		https://docs.xfce.org/apps/catfish/
 BuildRequires:	glib2-devel >= 1:2.72.0
 BuildRequires:	gtk+3-devel >= 3.24.0
